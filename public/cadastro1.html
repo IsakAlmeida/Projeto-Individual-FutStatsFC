@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>FutStatsFC | Login</title>
+
+    <script src="./js/sessao.js"></script>
+
+    <link rel="stylesheet" href="./css/login-cadastro.css">
+    <link rel="icon" href="./imgs/logoFutStatsPretoSemFundo.png">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+</head>
+
+<body>
+    <header class="header">
+        <div class="div-img">
+            <a href="index.html"><img src="imgs/LogoFutStatsBrancaSemFundo.png" alt="Logo FutStatsFC"></a>
+        </div>
+        <div class="div-nav">
+            <nav>
+                <ul>
+                    <a href="cadastro1.html"><button>Cadastro</button></a>
+                    <a href="login1.html"><button>Login</button></a>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="div-formulario">
+        <div class="alerta_erro">
+            <div class="card_erro" id="cardErro">
+                <span id="mensagem_erro"></span>
+            </div>
+        </div>
+
+        <h2>Bem vindo, fifeiro!</h2>
+
+        <div class="div-ipt">
+            <span>Nome:</span> <br>
+            <input id="nome_input" type="text" placeholder="Seu nome">
+        </div>
+
+        <div class="div-ipt">
+            <span>Email:</span> <br>
+            <input id="email_input" type="text" placeholder="exemplo@dominio.com">
+        </div>
+
+        <div class="div-ipt">
+            <span>Senha:</span><br>
+            <input id="senha_input" type="password" placeholder="******">
+        </div>
+
+        <div class="div-ipt">
+            <span>Confirmação de senha:</span><br>
+            <input id="confirmacao_senha_input" type="password" placeholder="******">
+        </div>
+
+        <button onclick="cadastrar()">Cadastrar</button>
+
+        <div id="div_aguardar" class="loading-div">
+            <img src="imgs/loading.gif" id="loading-gif">
+        </div>
+
+        <div id="div_erros_login"></div>
+
+        <p class="p-chamadaCadastro">Já possui uma conta? <br>
+            Clique <a href="login1.html">aqui</a> e entre na sua conta.</p>
+    </div>
+
+</body>
+<script>
+    function cadastrar() {
+        aguardar();
+
+        //Recupere o valor da nova input pelo nome do id
+        // Agora vá para o método fetch logo abaixo
+        var nomeVar = nome_input.value;
+        var emailVar = email_input.value;
+        var senhaVar = senha_input.value;
+        var confirmacaoSenhaVar = confirmacao_senha_input.value;
+
+        // Verificando se há algum campo em branco
+        if (
+            nomeVar == "" ||
+            emailVar == "" ||
+            senhaVar == "" ||
+            confirmacaoSenhaVar == ""
+        ) {
+            cardErro.style.display = "block";
+            let listaCamposVazios = [];
+
+            if (nomeVar == "") {
+                listaCamposVazios.push('nome')
+            }
+            if (emailVar == "") {
+                listaCamposVazios.push(' email')
+            }
+            if (senhaVar == "") {
+                listaCamposVazios.push(' senha')
+            }
+            if (confirmacaoSenhaVar == "") {
+                listaCamposVazios.push(' confirmação de senha')
+            }
+
+            if (listaCamposVazios.length > 1) {
+                mensagem_erro.innerHTML =
+                    `Erro: Os campos ${listaCamposVazios} não foram preenchidos.`;
+            } else {
+                mensagem_erro.innerHTML =
+                    `Erro: O campo ${listaCamposVazios} não foi preenchido.`;
+            }
+
+            finalizarAguardar();
+            setTimeout(sumirMensagem, 5000);
+            return false;
+        } else if (nomeVar.length <= 1) {
+            cardErro.style.display = "block";
+            mensagem_erro.innerHTML =
+                "Nome inválido! O nome deve ter mais de 1 caracter!";
+            finalizarAguardar();
+            setTimeout(sumirMensagem, 5000);
+            return false;
+        } else if (!emailVar.includes('@') || !emailVar.includes('.')) {
+            cardErro.style.display = "block";
+            mensagem_erro.innerHTML =
+                "Email inválido! O email deve conter '@' e '.'!";
+            finalizarAguardar();
+            setTimeout(sumirMensagem, 5000);
+            return false;
+        } else if (senhaVar.length <= 6) {
+            cardErro.style.display = "block";
+            mensagem_erro.innerHTML =
+                "Senha inválida! A senha deve conter mais de 6 caracteres";
+            finalizarAguardar();
+            setTimeout(sumirMensagem, 5000);
+            return false;
+        } else if (confirmacaoSenhaVar != senhaVar) {
+            cardErro.style.display = "block";
+            mensagem_erro.innerHTML =
+                "Confirmação de senha inválida! As duas senhas precisam ser exatamente iguais!";
+            finalizarAguardar();
+            setTimeout(sumirMensagem, 5000);
+            return false;
+        }
+        else {
+            setInterval(sumirMensagem, 5000);
+        }
+
+
+        // Enviando o valor da nova input
+        fetch("/usuarios/cadastrar", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                // crie um atributo que recebe o valor recuperado aqui
+                // Agora vá para o arquivo routes/usuario.js
+                nomeServer: nomeVar,
+                emailServer: emailVar,
+                senhaServer: senhaVar,
+            }),
+        })
+            .then(function (resposta) {
+                console.log("resposta: ", resposta);
+
+                if (resposta.ok) {
+                    cardErro.style.display = "block";
+                    mensagem_erro.innerHTML =
+                        "Cadastro realizado com sucesso! Redirecionando para tela de Login...";
+
+                    setTimeout(() => {
+                        window.location = "login1.html";
+                    }, "2000");
+
+                    limparFormulario();
+                    finalizarAguardar();
+                } else {
+                    cardErro.style.display = "block";
+                    mensagem_erro.innerHTML = "Este e-mail já está cadastrado! Tente outro e-mail.";
+                    setTimeout(sumirMensagem, 5000);
+                    finalizarAguardar();
+                    throw "Houve um erro ao tentar realizar o cadastro!";
+
+                }
+            }).catch(function (resposta) {
+                console.log(`#ERRO: ${resposta}`);
+                finalizarAguardar();
+            });
+
+        return false;
+    }
+
+    function sumirMensagem() {
+        cardErro.style.display = "none";
+    }
+</script>
+
+</html>
