@@ -18,6 +18,7 @@ var app = express();
 var indexRouter = require("./src/routes/index");
 var usuarioRouter = require("./src/routes/usuarios");
 var desempenhoRouter = require("./src/routes/desempenho");
+var registrarPartidaRouter = require("./src/routes/registrarPartida");
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -28,6 +29,7 @@ app.use(cors());
 app.use("/", indexRouter);
 app.use("/usuarios", usuarioRouter);
 app.use("/desempenho", desempenhoRouter);
+app.use("/registrarPartida", registrarPartidaRouter);
 
 
 

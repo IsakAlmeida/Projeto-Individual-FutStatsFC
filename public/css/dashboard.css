@@ -1,0 +1,67 @@
+/*Importando fonte Montserrat*/
+@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+/*Padronizando body*/
+body {
+    width: 100%;
+    margin: 0px;
+    font-family: 'Montserrat', sans-serif;
+    background-color: #1E1E1E;
+    color: #FFFF; 
+}
+
+/* Header */
+.header {
+    width: 240px;
+    height: 100vh;
+    border: 1px solid;
+    border-color: rgba(255, 249, 249, 0.4);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+
+.header nav ul {
+  display: flex;
+  flex-direction: column;
+  gap: 80px;
+  padding-left: 20px;
+  margin-left: 30px;
+  text-align: center;
+  
+}
+
+.header a{
+    font-size: 20px;
+    color: #FFFF;
+    width: 50px;
+    height: auto;
+    text-decoration: none;
+    text-align: center;
+}
+
+.header a:hover{
+    color: #07F468;
+    transform: scale(1.1);
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.header img{
+    margin-bottom: 25px;
+    margin-left: 10px;
+}
+
+.btnSair{
+    margin-top: 180px;
+}
+
+.header h3{
+    font-size: 25px;
+    color: #07F468;
+    margin-bottom: 100px;
+    text-align: center;
+}

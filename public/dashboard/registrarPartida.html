@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>FutStatsFC | Registrar Partida</title>
+
+    <script src="./js/sessao.js"></script>
+
+    <link rel="stylesheet" href="../css/registrarPartida.css">
+    <link rel="icon" href="../imgs/logoFutStatsPretoSemFundo.png" type="img/png">
+</head>
+
+<body>
+    <header class="header">
+        <img src="../imgs/LogoFutStatsBrancaSemFundo.png" alt="Logo FutStatsFC">
+        <h3>Olá, <span id="b_usuario">usuário</span>!</h3> &nbsp;&nbsp; <br>
+        <div class="div-nav">
+            <nav>
+                <ul>
+                    <a href="../dashboard/dashboard.html">Desempenho Geral</a>
+                    <a href="">Registrar Partida</a>
+                    <a href="../index.html" class="btnSair">Sair</a>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="div-formularioRegistrar">
+        <div class="div-inserir-dados">
+            <h2>Registrar Partida</h2>
+            <p>Preencha os campos abaixo para registrar uma nova partida e armazenar novos dados!</p> <br>
+
+            <h3>Gols</h3>
+            <div class="div-campo">
+                <p>* Quantidade de gols marcados: <span id="spanGolsMarcados" class="span-dados">0</span></h3>
+                </p>
+                <button onclick="addGolsMarcados()">+</button>
+                <button onclick="rmvGolsMarcados()">-</button>
+            </div>
+
+            <div class="div-campo">
+                <p>* Quantidade de gols sofridos: <span id="spanGolsSofridos" class="span-dados">0</span></h3>
+                </p>
+                <button onclick="addGolsSofridos()">+</button>
+                <button onclick="rmvGolsSofridos()">-</button>
+            </div>
+
+            <div class="div-campo">
+                <p>* Quantidade de chutes ao gol: <span id="spanChutesGol" class="span-dados">0</span></h3>
+                </p>
+                <button onclick="addChutesGol()">+</button>
+                <button onclick="rmvChutesGol()">-</button>
+            </div>
+            <br><br>
+            <h3>Resultado</h3>
+            <div class="div-campo">
+                <p>Resultado da Partida: <span id="spanResultado" class="span-dados"></span></h3>
+                </p>
+            </div>
+
+            <div class="div-campo">
+                <p>Placar Final: <span id="spanPlacar" class="span-dados"></span></h3>
+                </p>
+            </div>
+
+            <button onclick="enviarDados(chutesGol, golsMarcados, golsSofridos, resultado)" id="btnEnviar">Enviar
+                dados</button>
+        </div>
+
+        <div class="divConfirmarDados" id="divConfirmarDados" style="display: none;">
+
+        </div>
+    </div>
+</body>
+<script>
+
+// chama as funções assim que carrega a pagina
+    window.onload = () => {
+        resultadoPartida(golsMarcados, golsSofridos);
+        placar(golsMarcados, golsSofridos);
+    };
+
+    b_usuario.innerHTML = sessionStorage.NOME_USUARIO;
+
+    var golsMarcados = 0;
+    var golsSofridos = 0;
+    var chutesGol = 0;
+    var resultado;
+
+    const spanGolsMarcados = document.getElementById("spanGolsMarcados");
+    const spanGolsSofridos = document.getElementById("spanGolsSofridos");
+    const spanChutesGol = document.getElementById("spanChutesGol");
+    const spanResultado = document.getElementById("spanResultado");
+    const spanPlacar = document.getElementById("spanPlacar");
+    const divConfirmarDados = document.getElementById("divConfirmarDados");
+
+    // funções para gols marcados
+    function addGolsMarcados() {
+        golsMarcados++;
+        spanGolsMarcados.innerHTML = golsMarcados;
+
+        resultadoPartida(golsMarcados, golsSofridos);
+        placar(golsMarcados, golsSofridos);
+    }
+    function rmvGolsMarcados() {
+        if (golsMarcados > 0) {
+            golsMarcados--;
+            spanGolsMarcados.innerHTML = golsMarcados;
+        }
+        resultadoPartida(golsMarcados, golsSofridos);
+        placar(golsMarcados, golsSofridos);
+    }
+
+    // funções para gols sofridos
+    function addGolsSofridos() {
+        golsSofridos++;
+        spanGolsSofridos.innerHTML = golsSofridos;
+        resultadoPartida(golsMarcados, golsSofridos);
+        placar(golsMarcados, golsSofridos);
+    }
+    function rmvGolsSofridos() {
+        if (golsSofridos > 0) {
+            golsSofridos--;
+            spanGolsSofridos.innerHTML = golsSofridos;
+        }
+        resultadoPartida(golsMarcados, golsSofridos);
+        placar(golsMarcados, golsSofridos);
+    }
+
+    // função para exibir o resultado
+    function resultadoPartida(golsMarcados, golsSofridos) {
+        if (golsMarcados > golsSofridos) {
+            resultado = "Vitória";
+        } else if (golsMarcados == golsSofridos) {
+            resultado = "Empate";
+        } else {
+            resultado = "Derrota";
+        }
+
+        spanResultado.innerHTML = resultado;
+    }
+
+    // função para exibir o placar
+    function placar(golsMarcados, golsSofridos) {
+        spanPlacar.innerHTML = `${golsMarcados} x ${golsSofridos}`
+    }
+
+    // funções para chutes a gol
+    function addChutesGol() {
+        chutesGol++;
+        spanChutesGol.innerHTML = chutesGol;
+
+    }
+    function rmvChutesGol() {
+        if (chutesGol > 0) {
+            chutesGol--;
+            spanChutesGol.innerHTML = chutesGol;
+        }
+
+    }
+
+    // função para enviar os dados e chamar confirmação
+    function enviarDados(chutesGol, golsMarcados, golsSofridos, resultado) {
+        divConfirmarDados.style.display = "block";
+        divConfirmarDados.innerHTML = `<h3>Registrar partida com as estatísticas abaixo?</h3> <br>
+                                       Gols marcados: ${golsMarcados} <br>
+                                       Gols sofridos: ${golsSofridos} <br>
+                                       Chutes ao gol: ${chutesGol} <br>
+                                       Resultado da partida: ${resultado}<br><br>
+                            
+                                        <div class="botoes">
+                                        <button onclick="confirmarEnvio()">Confirmar</button>
+                                        <button onclick="cancelarEnvio()">Cancelar</button>
+                                        </div>`;
+    }
+
+    // função para enviar os dados pro banco
+    function confirmarEnvio() {
+        const id_usuario = sessionStorage.ID_USUARIO;
+
+        console.log({
+            id_usuario,
+            golsMarcados,
+            golsSofridos,
+            chutesGol,
+            resultado
+        });
+
+        fetch('/registrarPartida/registrar', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                idUsuario: id_usuario,
+                golsMarcados: golsMarcados,
+                golsSofridos: golsSofridos,
+                chutesGol: chutesGol,
+                resultado: resultado
+            })
+        }).then(function (res) {
+            if (res.ok) {
+                document.getElementById('divConfirmarDados').innerHTML = "Partida Registrada!";
+            } else {
+                document.getElementById('divConfirmarDados').innerHTML = "Erro ao registrar partida!";
+            }
+        })
+
+        setTimeout(recarregar, 3000);
+    }
+
+    // função que cancela o envio (apenas esconde a div)
+    function cancelarEnvio() {
+        divConfirmarDados.style.display = "none";
+    }
+
+    // função que recarrega a pagina
+    function recarregar() {
+        location.reload();
+    }
+
+</script>
+
+</html>

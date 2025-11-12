@@ -9,14 +9,12 @@ CREATE TABLE Usuario (
     nome VARCHAR(100) NOT NULL,
     email VARCHAR(100) UNIQUE NOT NULL,
 		CONSTRAINT chkEmail CHECK(email LIKE '%@%.%'),
-    senha VARCHAR(100) NOT NULL,
-    dataCadastro DATE
+    senha VARCHAR(100) NOT NULL
     );
 
 -- TABELA PARTIDA: ARMAZENA INFORMAÇÕES SOBRE CADA PARTIDA DE UM USUÁRIO
 CREATE TABLE Partida (
 	idPartida INT PRIMARY KEY AUTO_INCREMENT,
-    dataPartida DATETIME NOT NULL,
     golsFeitos INT NOT NULL,
     golsSofridos INT NOT NULL,
     resultado VARCHAR(50) NOT NULL,
@@ -43,4 +41,3 @@ CREATE TABLE DesempenhoGeral (
 				FOREIGN KEY (fkUsuario)
 					REFERENCES Usuario(idUsuario)
     );
-    
