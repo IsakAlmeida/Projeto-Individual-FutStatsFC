@@ -7,4 +7,8 @@ router.post("/registrar", function (req, res) {
     registrarPartidaController.registrar(req, res);
 });
 
+router.put("/atualizarDesempenho", function (req, res) {
+    registrarPartidaController.atualizarDesempenho(req, res);
+});
+
 module.exports = router;

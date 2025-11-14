@@ -182,14 +182,6 @@
     function confirmarEnvio() {
         const id_usuario = sessionStorage.ID_USUARIO;
 
-        console.log({
-            id_usuario,
-            golsMarcados,
-            golsSofridos,
-            chutesGol,
-            resultado
-        });
-
         fetch('/registrarPartida/registrar', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -202,7 +194,7 @@
             })
         }).then(function (res) {
             if (res.ok) {
-                document.getElementById('divConfirmarDados').innerHTML = "Partida Registrada!";
+                document.getElementById('divConfirmarDados').innerHTML = "Partida Registrada e desempenho atualizado!";
             } else {
                 document.getElementById('divConfirmarDados').innerHTML = "Erro ao registrar partida!";
             }

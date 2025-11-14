@@ -15,7 +15,7 @@ CREATE TABLE Usuario (
 -- TABELA PARTIDA: ARMAZENA INFORMAÇÕES SOBRE CADA PARTIDA DE UM USUÁRIO
 CREATE TABLE Partida (
 	idPartida INT PRIMARY KEY AUTO_INCREMENT,
-    golsFeitos INT NOT NULL,
+    golsMarcados INT NOT NULL,
     golsSofridos INT NOT NULL,
     resultado VARCHAR(50) NOT NULL,
     chutesGol INT NOT NULL,
@@ -28,16 +28,16 @@ CREATE TABLE Partida (
 -- TABELA DESEMPENHOGERAL: ARMAZENA INFORMAÇÕES MACRO SOBRE TODAS AS PARTIDAS DE UM USUARIO
 CREATE TABLE DesempenhoGeral (
 	idDesempenhoGeral INT PRIMARY KEY AUTO_INCREMENT,
-    totalPartidas INT,
-    vitorias INT,
-    empates INT,
-    derrotas INT,
-    golsFeitos INT,
-    golsSofridos INT,
-    mediaGolsPartida DECIMAL(4,2),
-    aproveitamento DECIMAL(5,2),
+    totalPartidas INT DEFAULT 0,
+    vitorias INT DEFAULT 0,
+    empates INT DEFAULT 0,
+    derrotas INT DEFAULT 0,
+    golsMarcados INT DEFAULT 0,
+    golsSofridos INT DEFAULT 0,
+    chutesGol INT DEFAULT 0,
     fkUsuario INT NOT NULL,
 		CONSTRAINT fkDesempenhoUsuario
 				FOREIGN KEY (fkUsuario)
 					REFERENCES Usuario(idUsuario)
     );
+
