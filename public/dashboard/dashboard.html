@@ -2,16 +2,16 @@
 <html lang="pt-br">
 
 <head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>FutStatsFC | Dashboard</title>
+    <title>FutStatsFC | Dashboard</title>
 
-  <script src="./js/sessao.js"></script>
+    <script src="../js/sessao.js"></script>
 
-  <link rel="stylesheet" href="../css/dashboard.css">
-  <link rel="icon" href="imgs/logoFutStatsPretoSemFundo.png" type="img/png">
+    <link rel="stylesheet" href="../css/dashboard.css">
+    <link rel="icon" href="imgs/logoFutStatsPretoSemFundo.png" type="img/png">
 </head>
 
 <body>
@@ -28,17 +28,76 @@
             </nav>
         </div>
     </header>
-
     <div class="div-dashboard">
         <div class="div-kpis">
             <span id="kpiMediaGolsMarcados">Média de gols marcados por partida: <br>
             </span>
         </div>
+
+        <div class="div-kpis">
+            <span id="kpiMediaGolsSofridos">Média de gols sofridos por partida: <br>
+            </span>
+        </div>
+
+        <div class="div-kpis">
+            <span id="kpiAproveitamento">Aproveitamento de partidas: <br>
+            </span>
+        </div>
+
+         <div class="div-kpis">
+            <span id="kpiSaldo">Saldo de gols atual:<br><br>
+            </span>
+        </div>
+
+        <div class="div-kpis">
+            <span id="kpiPrecisao">Precisão de chutes ao gol: <br>
+            </span>
+        </div>
+
     </div>
 </body>
 <script>
+    window.onload = () => {
+        gerarKpis();
+    };
+
     b_usuario.innerHTML = sessionStorage.NOME_USUARIO;
 
-    
+    const kpiMediaGolsMarcados = document.getElementById("kpiMediaGolsMarcados");
+    const kpiMediaGolsSofridos =document.getElementById("kpiMediaGolsSofridos");
+    const kpiAproveitamento = document.getElementById("kpiAproveitamento");
+    const kpiSaldo = document.getElementById("kpiSaldo");
+    const kpiPrecisao = document.getElementById("kpiPrecisao");
+
+    function gerarKpis() {
+        var idUsuario = sessionStorage.ID_USUARIO;
+        fetch(`/desempenho/consultarTodosDados/${idUsuario}`, { cache: 'no-store' }).then(response => response.json()) // converte a resposta em json
+            .then(function (dados) {
+                const dadosDesempenhoGeral = dados[0];
+                var partidas = Number(dadosDesempenhoGeral.totalPartidas);
+                var golsMarcados = Number(dadosDesempenhoGeral.golsMarcados);
+                var golsSofridos = Number(dadosDesempenhoGeral.golsSofridos);
+                var vitorias = Number(dadosDesempenhoGeral.vitorias);
+                var chutesGol = Number(dadosDesempenhoGeral.chutesGol);
+
+                // KPI de média de gols marcados por partida
+                kpiMediaGolsMarcados.innerHTML += `<br><span class="resultadoKpi">${(golsMarcados/partidas).toFixed(1)} gols</span>`;
+
+                // KPI de média de gols sofridos por partida
+                kpiMediaGolsSofridos.innerHTML += `<br><span class="resultadoKpi">${(golsSofridos/partidas).toFixed(1)} gols</span>`;
+
+                // KPI de aproveitamento (percentual de vitórias em relação ao total de partidas)
+                kpiAproveitamento.innerHTML += `<br><span class="resultadoKpi">${(vitorias/partidas*100).toFixed(2)}%</span>`;
+
+                // KPI de saldo de gols
+                kpiSaldo.innerHTML += `<br><span class="resultadoKpi">${golsMarcados - golsSofridos}</span>`;
+
+                // KPI de precisao de chutes ao gol (proporção de gols em relação aos chutes ao gol)
+                kpiPrecisao.innerHTML += `<br><span class="resultadoKpi">${(golsMarcados/chutesGol*100).toFixed(2)}%</span>`;
+            });
+
+    }
+
 </script>
+
 </html>
