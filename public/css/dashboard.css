@@ -66,7 +66,7 @@ body {
     text-align: center;
 }
 
-.div-dashboard{
+.div-TodasKpis{
     margin-left: 320px;
     margin-top: 40px;
     display: flex;
@@ -91,4 +91,27 @@ body {
 .resultadoKpi{
     color: #07F468;
     font-size: 25px;
+}
+
+.div-graficos{
+    margin-left: 320px;
+    margin-top: 50px;
+    display: flex;
+    gap: 100px;
+}
+
+#graficoPizza{
+    width: 400px;
+    height: auto;
+}
+
+
+
+#graficoBarras{
+    width: 1000px;
+    height: auto;
+}
+
+.grafico{
+    text-align: center;
 }

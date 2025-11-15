@@ -40,4 +40,3 @@ CREATE TABLE DesempenhoGeral (
 				FOREIGN KEY (fkUsuario)
 					REFERENCES Usuario(idUsuario)
     );
-

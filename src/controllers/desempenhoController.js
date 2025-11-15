@@ -12,16 +12,16 @@ function consultarTodosDados(req, res) {
     }).catch(function (erro) {
         console.log(erro);
         console.log(
-            "Houve um erro ao buscar os avisos: ",
+            "Houve um erro ao buscar os dados: ",
             erro.sqlMessage
         );
         res.status(500).json(erro.sqlMessage);
     })
 }
 
-function consultarGols(req, res) {
+function consultarUltimasPartidas(req, res) {
     var idUsuario = req.params.idUsuario;
-    desempenhoModel.consultarGols(idUsuario).then(function (resultado) {
+    desempenhoModel.consultarUltimasPartidas(idUsuario).then(function (resultado) {
         if (resultado.length > 0) {
             res.status(200).json(resultado);
         } else {
@@ -30,7 +30,7 @@ function consultarGols(req, res) {
     }).catch(function (erro) {
         console.log(erro);
         console.log(
-            "Houve um erro ao buscar os avisos: ",
+            "Houve um erro ao buscar os dados: ",
             erro.sqlMessage
         );
         res.status(500).json(erro.sqlMessage);
@@ -39,5 +39,5 @@ function consultarGols(req, res) {
 
 module.exports = {
     consultarTodosDados,
-    consultarGols
+    consultarUltimasPartidas
 }

@@ -11,7 +11,8 @@
     <script src="../js/sessao.js"></script>
 
     <link rel="stylesheet" href="../css/dashboard.css">
-    <link rel="icon" href="imgs/logoFutStatsPretoSemFundo.png" type="img/png">
+    <link rel="icon" href="../imgs/logoFutStatsPretoSemFundo.png" type="img/png">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
 <body>
@@ -29,74 +30,226 @@
         </div>
     </header>
     <div class="div-dashboard">
-        <div class="div-kpis">
-            <span id="kpiMediaGolsMarcados">Média de gols marcados por partida: <br>
-            </span>
+        <div class="div-TodasKpis">
+            <div class="div-kpis">
+                <span id="kpiMediaGolsMarcados">Média de gols marcados por partida: <br>
+                </span>
+            </div>
+
+            <div class="div-kpis">
+                <span id="kpiMediaGolsSofridos">Média de gols sofridos por partida: <br>
+                </span>
+            </div>
+
+            <div class="div-kpis">
+                <span id="kpiAproveitamento">Aproveitamento de partidas: <br>
+                </span>
+            </div>
+
+            <div class="div-kpis">
+                <span id="kpiSaldo">Saldo de gols atual:<br><br>
+                </span>
+            </div>
+
+            <div class="div-kpis">
+                <span id="kpiPrecisao">Precisão de chutes ao gol: <br>
+                </span>
+            </div>
         </div>
 
-        <div class="div-kpis">
-            <span id="kpiMediaGolsSofridos">Média de gols sofridos por partida: <br>
-            </span>
-        </div>
-
-        <div class="div-kpis">
-            <span id="kpiAproveitamento">Aproveitamento de partidas: <br>
-            </span>
-        </div>
-
-         <div class="div-kpis">
-            <span id="kpiSaldo">Saldo de gols atual:<br><br>
-            </span>
-        </div>
-
-        <div class="div-kpis">
-            <span id="kpiPrecisao">Precisão de chutes ao gol: <br>
-            </span>
+        <div class="div-graficos">
+            <div class="grafico">
+                <h2>Aproveitamento Total</h2>
+                <canvas id="graficoPizza"></canvas>
+            </div>
+            <div class="grafico">
+                <h2>Quantidade de gols nas últimas 10 partidas registradas</h2>
+                <canvas id="graficoBarras"></canvas>
+            </div>
         </div>
 
     </div>
 </body>
 <script>
     window.onload = () => {
-        gerarKpis();
+        coletarDados();
+        coletarUltimasPartidas();
     };
 
     b_usuario.innerHTML = sessionStorage.NOME_USUARIO;
+    var idUsuario = sessionStorage.ID_USUARIO;
 
     const kpiMediaGolsMarcados = document.getElementById("kpiMediaGolsMarcados");
-    const kpiMediaGolsSofridos =document.getElementById("kpiMediaGolsSofridos");
+    const kpiMediaGolsSofridos = document.getElementById("kpiMediaGolsSofridos");
     const kpiAproveitamento = document.getElementById("kpiAproveitamento");
     const kpiSaldo = document.getElementById("kpiSaldo");
     const kpiPrecisao = document.getElementById("kpiPrecisao");
 
-    function gerarKpis() {
-        var idUsuario = sessionStorage.ID_USUARIO;
-        fetch(`/desempenho/consultarTodosDados/${idUsuario}`, { cache: 'no-store' }).then(response => response.json()) // converte a resposta em json
-            .then(function (dados) {
-                const dadosDesempenhoGeral = dados[0];
-                var partidas = Number(dadosDesempenhoGeral.totalPartidas);
-                var golsMarcados = Number(dadosDesempenhoGeral.golsMarcados);
-                var golsSofridos = Number(dadosDesempenhoGeral.golsSofridos);
-                var vitorias = Number(dadosDesempenhoGeral.vitorias);
-                var chutesGol = Number(dadosDesempenhoGeral.chutesGol);
+    var dadosDesempenhoGeral = [];
+    var ultimasPartidas = [];
 
-                // KPI de média de gols marcados por partida
-                kpiMediaGolsMarcados.innerHTML += `<br><span class="resultadoKpi">${(golsMarcados/partidas).toFixed(1)} gols</span>`;
-
-                // KPI de média de gols sofridos por partida
-                kpiMediaGolsSofridos.innerHTML += `<br><span class="resultadoKpi">${(golsSofridos/partidas).toFixed(1)} gols</span>`;
-
-                // KPI de aproveitamento (percentual de vitórias em relação ao total de partidas)
-                kpiAproveitamento.innerHTML += `<br><span class="resultadoKpi">${(vitorias/partidas*100).toFixed(2)}%</span>`;
-
-                // KPI de saldo de gols
-                kpiSaldo.innerHTML += `<br><span class="resultadoKpi">${golsMarcados - golsSofridos}</span>`;
-
-                // KPI de precisao de chutes ao gol (proporção de gols em relação aos chutes ao gol)
-                kpiPrecisao.innerHTML += `<br><span class="resultadoKpi">${(golsMarcados/chutesGol*100).toFixed(2)}%</span>`;
-            });
-
+    function coletarDados() {
+        fetch(`/desempenho/consultarTodosDados/${idUsuario}`, { cache: 'no-store' }).then(function (response) {
+            if (response.ok) {
+                response.json().then(function (dados) {
+                    dadosDesempenhoGeral = dados[0];
+                    gerarKpis();
+                    gerarGraficoPizza(); // chama as funções após coletar os dados
+                });
+            } else {
+                console.error("Erro ao buscar os dados");
+            }
+        })
     }
+
+    function coletarUltimasPartidas() {
+        fetch(`/desempenho/consultarUltimasPartidas/${idUsuario}`, { cache: 'no-store' }).then(function (response) {
+            if (response.ok) {
+                response.json().then(function (dados) {
+                    ultimasPartidas = dados;
+                    gerarGraficoBarra();
+                });
+            } else {
+                console.error("Erro ao buscar os dados");
+            }
+        })
+    }
+
+
+    function gerarKpis() {
+        var partidas = Number(dadosDesempenhoGeral.totalPartidas);
+        var golsMarcados = Number(dadosDesempenhoGeral.golsMarcados);
+        var golsSofridos = Number(dadosDesempenhoGeral.golsSofridos);
+        var vitorias = Number(dadosDesempenhoGeral.vitorias);
+        var chutesGol = Number(dadosDesempenhoGeral.chutesGol);
+
+        // KPI de média de gols marcados por partida
+        kpiMediaGolsMarcados.innerHTML += `<br><span class="resultadoKpi">${(golsMarcados / partidas).toFixed(1)} gols</span>`;
+
+        // KPI de média de gols sofridos por partida
+        kpiMediaGolsSofridos.innerHTML += `<br><span class="resultadoKpi">${(golsSofridos / partidas).toFixed(1)} gols</span>`;
+
+        // KPI de aproveitamento (percentual de vitórias em relação ao total de partidas)
+        kpiAproveitamento.innerHTML += `<br><span class="resultadoKpi">${(vitorias / partidas * 100).toFixed(2)}%</span>`;
+
+        // KPI de saldo de gols
+        kpiSaldo.innerHTML += `<br><span class="resultadoKpi">${golsMarcados - golsSofridos}</span>`;
+
+        // KPI de precisao de chutes ao gol (proporção de gols em relação aos chutes ao gol)
+        kpiPrecisao.innerHTML += `<br><span class="resultadoKpi">${(golsMarcados / chutesGol * 100).toFixed(2)}%</span>`;
+    }
+
+    // função para gerar o gráfico de aproveitamento em relação as partidas
+    function gerarGraficoPizza() {
+        var vitorias = Number(dadosDesempenhoGeral.vitorias);
+        var empates = Number(dadosDesempenhoGeral.empates);
+        var derrotas = Number(dadosDesempenhoGeral.derrotas);
+        var partidas = Number(dadosDesempenhoGeral.totalPartidas);
+
+        var percentVitorias = ((vitorias / partidas) * 100).toFixed(2);
+        var percentEmpates = ((empates / partidas) * 100).toFixed(2);
+        var percentDerrotas = ((derrotas / partidas) * 100).toFixed(2);
+
+        const ctx = document.getElementById("graficoPizza");
+        new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: [`Vitórias %`, `Empates %`, `Derrotas %`],
+                datasets: [{
+                    data: [percentVitorias, percentEmpates, percentDerrotas],
+                    borderWidth: 1,
+                    backgroundColor: [
+                        '#07F468',
+                        '#328552',
+                        '#7BAE7F'
+                    ],
+                    borderColor: 'black'
+                }]
+            },
+            options: {
+                responsive: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            font: {
+                                size: 15
+                            },
+                            color: '#FFFFFF'
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    // função para gerar o gráfico de gols das ultimas 10 partidas
+    function gerarGraficoBarra() {
+        var pegarIdPartidas = [];
+        var golsMarcados = [];
+        var golsSofridos = [];
+        var idPartidasFinal = [];
+
+        for (let i = 0; i < ultimasPartidas.length; i++) {
+            pegarIdPartidas.push(ultimasPartidas[i].idPartida); //pego os ids das partidas em orderm decrescente
+        }
+
+        for(let i = ultimasPartidas.length - 1; i >= 0; i--){
+            idPartidasFinal.push(`Partida ${pegarIdPartidas[i]}`); //coloco os ids em ordem para exibição
+            golsMarcados.push(ultimasPartidas[i].golsMarcados);
+            golsSofridos.push(ultimasPartidas[i].golsSofridos);
+        }
+
+        const ctx = document.getElementById('graficoBarras');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: idPartidasFinal,
+                datasets: [{
+                    label: 'Gols Marcados',
+                    data: golsMarcados,
+                    borderWidth: 1,
+                    backgroundColor: '#07F468',
+                    borderRadius: 15
+                }, {
+                    label: 'Gols Sofridos',
+                    data: golsSofridos,
+                    borderWidth: 1,
+                    backgroundColor: '#328552',
+                    borderRadius: 15
+                }]
+            },
+            options: {
+                responsive: false,
+                indexAxis: 'x',
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    },
+                    x: {
+                        ticks: {
+                            font: {
+                                size: 15,
+                            },
+                            color: 'white'
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        labels: {
+                            font: {
+                                size: 15
+                            },
+                            color: '#FFFFFF'
+                        }
+                    }
+                }
+            }
+        });
+    }
+
 
 </script>
 
