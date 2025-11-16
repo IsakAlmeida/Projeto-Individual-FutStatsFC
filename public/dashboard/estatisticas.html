@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>FutStatsFC | Dashboard</title>
+
+    <script src="../js/sessao.js"></script>
+
+    <link rel="stylesheet" href="../css/estatisticas.css">
+    <link rel="icon" href="../imgs/logoFutStatsPretoSemFundo.png" type="img/png">
+</head>
+
+<body>
+    <header class="header">
+        <img src="../imgs/LogoFutStatsBrancaSemFundo.png" alt="Logo FutStatsFC">
+        <h3>Olá, <span id="b_usuario">usuário</span>!</h3> &nbsp;&nbsp; <br>
+        <div class="div-nav">
+            <nav>
+                <ul>
+                    <a href="../dashboard/dashboard.html">Desempenho Geral</a>
+                    <a href="../dashboard/registrarPartida.html">Registrar Partida</a>
+                    <a href="../index.html" class="btnSair">Sair</a>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <a href="dashboard.html"><img src="../imgs/btnVoltar.png" alt="btnVoltar" id="btnVoltar"></a>
+    <h2>Estatísticas gerais</h2>
+    <div class="div-estatisticas">
+
+        <div class="div-partidas">
+            <h3>Partidas</h3>
+            <p id="ppartidas">Partidas registradas: </p>
+            <p id="pvitorias">Vitórias: </p>
+            <p id="pempates">Empates: </p>
+            <p id="pderrotas">Derrotas: </p>
+        </div>
+
+        <div class="div-gols">
+            <h3>Gols</h3>
+            <p id="pchutesGols">Chutes ao gol: </p>
+            <p id="pgolsMarcados">Gols marcados: </p>
+            <p id="pgolsSofridos">Gols sofridos: </p>
+        </div>
+
+    </div>
+</body>
+<script>
+    window.onload = () => {
+        coletarDados();
+        coletarUltimasPartidas();
+    };
+
+    b_usuario.innerHTML = sessionStorage.NOME_USUARIO;
+    var idUsuario = sessionStorage.ID_USUARIO;
+
+    var dadosDesempenhoGeral = [];
+
+    // reaproveitando a função para coletar todos os dados
+    function coletarDados() {
+        fetch(`/desempenho/consultarTodosDados/${idUsuario}`, { cache: 'no-store' }).then(function (response) {
+            if (response.ok) {
+                response.json().then(function (dados) {
+                    dadosDesempenhoGeral = dados[0];
+                    exibirEstatisticas(); // chama a função após coletar os dados
+                });
+            } else {
+                console.error("Erro ao buscar os dados");
+            }
+        })
+    }
+
+    function exibirEstatisticas() {
+        var partidas = dadosDesempenhoGeral.totalPartidas;
+        var golsMarcados = dadosDesempenhoGeral.golsMarcados;
+        var golsSofridos = dadosDesempenhoGeral.golsSofridos;
+        var vitorias = dadosDesempenhoGeral.vitorias;
+        var chutesGol = dadosDesempenhoGeral.chutesGol;
+        var empates = dadosDesempenhoGeral.empates;
+        var derrotas = dadosDesempenhoGeral.derrotas;
+
+        ppartidas.innerHTML += `<b>${partidas}</b>`;
+        pgolsMarcados.innerHTML += `<b>${golsMarcados}</b>`;
+        pgolsSofridos.innerHTML += `<b>${golsSofridos}</b>`;
+        pvitorias.innerHTML += `<b>${vitorias}</b>`;
+        pempates.innerHTML += `<b>${empates}</b>`;
+        pderrotas.innerHTML += `<b>${derrotas}</b>`;
+        pchutesGols.innerHTML += `<b>${chutesGol}</b>`;
+        
+    }
+</script>

@@ -29,7 +29,8 @@
             </nav>
         </div>
     </header>
-    <div class="div-dashboard">
+    <div class="divSpanSemDados" id="divSpanSemDados"></div>
+    <div class="divDashboard" id="divDashboard">
         <div class="div-TodasKpis">
             <div class="div-kpis">
                 <span id="kpiMediaGolsMarcados">Média de gols marcados por partida: <br>
@@ -68,12 +69,16 @@
             </div>
         </div>
 
+        <div class="div-estatisticas">
+            <p>Clique aqui para visualizar todas as suas estatísticas!</p>
+            <button onclick="estatisticas()">Ver estatísticas gerais</button>
+        </div>
+
     </div>
 </body>
 <script>
     window.onload = () => {
         coletarDados();
-        coletarUltimasPartidas();
     };
 
     b_usuario.innerHTML = sessionStorage.NOME_USUARIO;
@@ -84,6 +89,11 @@
     const kpiAproveitamento = document.getElementById("kpiAproveitamento");
     const kpiSaldo = document.getElementById("kpiSaldo");
     const kpiPrecisao = document.getElementById("kpiPrecisao");
+    const divDashboard = document.getElementById("divDashboard");
+    const divSpanSemDados = document.getElementById("divSpanSemDados");
+
+    divDashboard.style.display = "none";
+    divSpanSemDados.style.display = "none";
 
     var dadosDesempenhoGeral = [];
     var ultimasPartidas = [];
@@ -92,9 +102,17 @@
         fetch(`/desempenho/consultarTodosDados/${idUsuario}`, { cache: 'no-store' }).then(function (response) {
             if (response.ok) {
                 response.json().then(function (dados) {
-                    dadosDesempenhoGeral = dados[0];
-                    gerarKpis();
-                    gerarGraficoPizza(); // chama as funções após coletar os dados
+                    if (dados.length == 0) { // verifica se o usuario tem dados registrados
+                        divSpanSemDados.style.display = "block";
+                        divSpanSemDados.innerHTML = `Parece que você ainda não tem dados registrados... <br><br>
+                            Clique <a href="../dashboard/registrarPartida.html">aqui</a> para registrar os seus dados e começar a analisar o seu desempenho!`;
+                    } else {
+                        divDashboard.style.display = "block";
+                        dadosDesempenhoGeral = dados[0];
+                        coletarUltimasPartidas();
+                        gerarKpis();
+                        gerarGraficoPizza(); // chama as funções após coletar os dados
+                    }
                 });
             } else {
                 console.error("Erro ao buscar os dados");
@@ -185,17 +203,13 @@
 
     // função para gerar o gráfico de gols das ultimas 10 partidas
     function gerarGraficoBarra() {
-        var pegarIdPartidas = [];
         var golsMarcados = [];
         var golsSofridos = [];
         var idPartidasFinal = [];
+        var numPartidas = Number(dadosDesempenhoGeral.totalPartidas);
 
-        for (let i = 0; i < ultimasPartidas.length; i++) {
-            pegarIdPartidas.push(ultimasPartidas[i].idPartida); //pego os ids das partidas em orderm decrescente
-        }
-
-        for(let i = ultimasPartidas.length - 1; i >= 0; i--){
-            idPartidasFinal.push(`Partida ${pegarIdPartidas[i]}`); //coloco os ids em ordem para exibição
+        for (let i = ultimasPartidas.length - 1; i >= 0; i--) { //adiciona nos vetores os dados correspondentes a cada variavel
+            idPartidasFinal.push(`Partida ${numPartidas--}`); 
             golsMarcados.push(ultimasPartidas[i].golsMarcados);
             golsSofridos.push(ultimasPartidas[i].golsSofridos);
         }
@@ -204,7 +218,7 @@
         new Chart(ctx, {
             type: 'bar',
             data: {
-                labels: idPartidasFinal,
+                labels: idPartidasFinal.reverse(), //reverte a ordem de exibição para começar da primeira partida registrada
                 datasets: [{
                     label: 'Gols Marcados',
                     data: golsMarcados,
@@ -215,7 +229,7 @@
                     label: 'Gols Sofridos',
                     data: golsSofridos,
                     borderWidth: 1,
-                    backgroundColor: '#328552',
+                    backgroundColor: '#7BAE7F',
                     borderRadius: 15
                 }]
             },
@@ -237,7 +251,7 @@
                 },
                 plugins: {
                     legend: {
-                        position: 'top',
+                        position: 'bottom',
                         labels: {
                             font: {
                                 size: 15
@@ -250,7 +264,9 @@
         });
     }
 
-
+    function estatisticas() {
+        window.location = "../dashboard/estatisticas.html" //leva para a página de estatisticas
+    }
 </script>
 
 </html>

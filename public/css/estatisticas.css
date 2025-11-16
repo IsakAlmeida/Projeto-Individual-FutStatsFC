@@ -65,92 +65,31 @@ body {
     margin-bottom: 100px;
     text-align: center;
 }
-
-
-.div-TodasKpis{
+h2{
     margin-left: 320px;
-    margin-top: 40px;
-    display: flex;
-    gap: 80px;
+    margin-top: 30px;
+    font-size: 50px;
 }
-
-.div-kpis{
-    background-color: #FFFF;
-    border-radius: 15px;
-    border: 3px solid #07F468;
-    color: #1E1E1E;
-    width: 210px;
-    height: 90px;
-    text-align: center;
-    padding: 10px;
-}
-
-.div-kpis span{
-    font-weight: 700;
-}
-
-.resultadoKpi{
-    color: #07F468;
-    font-size: 25px;
-}
-
-.div-graficos{
-    margin-left: 320px;
-    margin-top: 50px;
-    display: flex;
-    gap: 100px;
-}
-
-#graficoPizza{
-    width: 400px;
-    height: auto;
-}
-
-
-
-#graficoBarras{
-    width: 1000px;
-    height: auto;
-}
-
-.grafico{
-    text-align: center;
-}
-
 .div-estatisticas{
-    margin-left: 370px;
-}
-.div-estatisticas p{
-    font-size: 20px;
-    width: 280px;
-}
-
-
-.div-estatisticas button {
-    background-color: #07F468;
-    color: #1E1E1E;
-    border-radius: 20px;
-    width: 280px;
-    height: 30px;
-    font-family: 'Montserrat', sans-serif;
-    font-size: 20px;
+    margin-left: 320px;
+    display: flex;
+    gap: 400px;
+    font-size: 40px;
 }
 
-.div-estatisticas button:hover {
-    background-color: #B1EBCE;
+.div-estatisticas h3{
+    color: #07F468;
+}
+
+#btnVoltar{
+    margin-left: 300px;
+    margin-top: 20px;
+    width: 50px;
+    height: auto;
+}
+
+#btnVoltar:hover{
     transform: scale(1.1);
     transition: all 0.2s ease;
     cursor: pointer;
-}
-
-.divSpanSemDados {
-    margin-left: 400px;
-    margin-top: 300px;
-    font-size: 50px;
-    text-align: center;
-    width: 1300px;
-}
-
-.divSpanSemDados a{
-    color: #07F468;
 }
