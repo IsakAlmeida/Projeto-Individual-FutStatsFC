@@ -6,7 +6,7 @@ O **FutStatsFC** é um website desenvolvido como projeto individual do 1º semes
 
 ---
 
-**Sobre o Projeto**
+## **Sobre o Projeto**
 O FutStatsFC nasceu da união entre minha paixão por futebol e meu interesse por tecnologia. O projeto aplica conhecimentos adquiridos ao longo do semestre, utilizando:
 
 - **HTML, CSS e JavaScript** (Front-end) 
@@ -17,7 +17,7 @@ O FutStatsFC nasceu da união entre minha paixão por futebol e meu interesse po
 
 ---
 
-**Objetivo**
+## **Objetivo**
 Criar uma plataforma onde o usuário possa:
 
 - Cadastrar-se e fazer login 
@@ -26,7 +26,7 @@ Criar uma plataforma onde o usuário possa:
 
 ---
 
-**Escopo do Projeto**
+## **Escopo do Projeto**
 O FutStatsFC inclui:
 
 - Página inicial apresentando o tema e o propósito do projeto  
