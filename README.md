@@ -1,22 +1,42 @@
-# FutStatsFC
+# **FutStatsFC**
 
-![Logo](./imgs/logoFutStatsComFundo.jpg)
+![Logo](./public/imgs/logoFutStatsComFundo.jpg)
 
-O **FutStatsFC** é um website desenvolvido como projeto individual do primeiro semestre do Curso Superior de Tecnologia em Análise e Desenvolvimento de Sistemas. Inspirado no universo do jogo **EA FC**, o site tem como objetivo criar um espaço onde os fãs do futebol virtual possam se cadastrar e registrar seus resultados e estatísticas dentro do jogo.
+O **FutStatsFC** é um website desenvolvido como projeto individual do 1º semestre do curso de Análise e Desenvolvimento de Sistemas da **SPTech School**. Inspirado no jogo **EA FC (antigo FIFA)**, o sistema permite registrar partidas e visualizar análises completas de desempenho através de gráficos, KPIs e estatísticas gerais.
 
 ---
 
-## Sobre o Projeto
+**Sobre o Projeto**
+O FutStatsFC nasceu da união entre minha paixão por futebol e meu interesse por tecnologia. O projeto aplica conhecimentos adquiridos ao longo do semestre, utilizando:
 
-Desde criança, sempre fui apaixonado por futebol e pelo jogo **EA FC**, que se destaca pelo seu realismo, jogabilidade envolvente e variedade de modos de jogo. Essa paixão me inspirou a desenvolver o **FutStatsFC**, unindo o que gosto ao aprendizado em tecnologia adquirido na faculdade SPTech School.
+- **HTML, CSS e JavaScript** (Front-end) 
+- **Node.js** (Back-end)
+- **MySQL** (Banco de Dados)  
+- **API** para envio e consulta de dados 
+- **Dashboard** com gráficos e indicadores de desempenho
 
-O projeto busca aplicar na prática os conhecimentos adquiridos nas disciplinas do semestre, utilizando **HTML**, **CSS**, **JavaScript**, **Node.js** e **Banco de Dados** para construir um site funcional e interativo.
+---
 
-O **FutStatsFC** inclui:
+**Objetivo**
+Criar uma plataforma onde o usuário possa:
 
-- **Página inicial** apresentando o tema e o propósito do projeto;  
-- **Formulário de cadastro**;  
-- **Integração com Node.js** para envio e consulta dos dados;  
-- **Banco de dados MySQL** para armazenar informações dos usuários;  
-- **Área de login e consulta** de perfis;  
-- **Dashboard** exibindo resultados e desempenho do jogador.
+- Cadastrar-se e fazer login 
+- Registrar partidas do EA FC 
+- Visualizar estatísticas, KPIs e gráficos de desempenho
+
+---
+
+**Escopo do Projeto**
+O FutStatsFC inclui:
+
+- Página inicial apresentando o tema e o propósito do projeto  
+- Sistema de cadastro e login  
+- Integração com MySQL através de API em Node.js  
+- Dashboard com:  
+  - Gráfico de pizza (vitórias, empates e derrotas)  
+  - Gráfico de barras (gols feitos e sofridos nas últimas 10 partidas)  
+  - KPIs (médias, precisão, saldo, aproveitamento)  
+  - Estatísticas gerais  
+- Front-end desenvolvido em **HTML, CSS e JS**  
+- Versionamento no **GitHub**  
+- Organização do desenvolvimento no **Trello**
