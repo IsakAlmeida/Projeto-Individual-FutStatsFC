@@ -22,7 +22,7 @@
         <div class="div-nav">
             <nav>
                 <ul>
-                    <a href="../dashboard/dashboard.html">Desempenho Geral</a>
+                    <a href="../dashboard/dashboard.html" class="ativo">Desempenho Geral</a>
                     <a href="../dashboard/registrarPartida.html">Registrar Partida</a>
                     <a href="../index.html" class="btnSair">Sair</a>
                 </ul>
@@ -99,9 +99,9 @@
     var ultimasPartidas = [];
 
     function coletarDados() {
-        fetch(`/desempenho/consultarTodosDados/${idUsuario}`, { cache: 'no-store' }).then(function (response) {
-            if (response.ok) {
-                response.json().then(function (dados) {
+        fetch(`/desempenho/consultarTodosDados/${idUsuario}`, { method: "GET" }).then(function (resposta) {
+            if (resposta.ok) {
+                resposta.json().then(function (dados) {
                     if (dados.length == 0) { // verifica se o usuario tem dados registrados
                         divSpanSemDados.style.display = "block";
                         divSpanSemDados.innerHTML = `Parece que você ainda não tem dados registrados... <br><br>
@@ -121,9 +121,9 @@
     }
 
     function coletarUltimasPartidas() {
-        fetch(`/desempenho/consultarUltimasPartidas/${idUsuario}`, { cache: 'no-store' }).then(function (response) {
-            if (response.ok) {
-                response.json().then(function (dados) {
+        fetch(`/desempenho/consultarUltimasPartidas/${idUsuario}`, { method: "GET"}).then(function (resposta) {
+            if (resposta.ok) {
+                resposta.json().then(function (dados) {
                     ultimasPartidas = dados;
                     gerarGraficoBarra();
                 });
@@ -209,7 +209,7 @@
         var numPartidas = Number(dadosDesempenhoGeral.totalPartidas);
 
         for (let i = ultimasPartidas.length - 1; i >= 0; i--) { //adiciona nos vetores os dados correspondentes a cada variavel
-            idPartidasFinal.push(`Partida ${numPartidas--}`); 
+            idPartidasFinal.push(`Partida ${numPartidas--}`);
             golsMarcados.push(ultimasPartidas[i].golsMarcados);
             golsSofridos.push(ultimasPartidas[i].golsSofridos);
         }

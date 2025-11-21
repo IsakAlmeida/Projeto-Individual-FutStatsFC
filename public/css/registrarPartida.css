@@ -50,6 +50,12 @@ body {
     cursor: pointer;
 }
 
+.header a.ativo {
+    border-left: 4px solid #07F468;
+    padding-left: 10px;
+    color: #07F468;
+}
+
 .header img {
     margin-bottom: 25px;
     margin-left: 10px;
@@ -183,4 +189,10 @@ body {
 
 .divConfirmarDados {
     font-size: 30px;
+}
+
+.registrada {
+    display: block;
+    text-align: center;
+    margin-top: 190px;
 }

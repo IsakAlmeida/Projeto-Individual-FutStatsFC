@@ -21,7 +21,7 @@
         <div class="div-nav">
             <nav>
                 <ul>
-                    <a href="../dashboard/dashboard.html">Desempenho Geral</a>
+                    <a href="../dashboard/dashboard.html" class="ativo">Desempenho Geral</a>
                     <a href="../dashboard/registrarPartida.html">Registrar Partida</a>
                     <a href="../index.html" class="btnSair">Sair</a>
                 </ul>
@@ -62,9 +62,9 @@
 
     // reaproveitando a função para coletar todos os dados
     function coletarDados() {
-        fetch(`/desempenho/consultarTodosDados/${idUsuario}`, { cache: 'no-store' }).then(function (response) {
-            if (response.ok) {
-                response.json().then(function (dados) {
+        fetch(`/desempenho/consultarTodosDados/${idUsuario}`, { cache: 'no-store' }).then(function (resposta) {
+            if (resposta.ok) {
+                resposta.json().then(function (dados) {
                     dadosDesempenhoGeral = dados[0];
                     exibirEstatisticas(); // chama a função após coletar os dados
                 });

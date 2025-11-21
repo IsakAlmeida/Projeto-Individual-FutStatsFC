@@ -22,7 +22,7 @@
             <nav>
                 <ul>
                     <a href="../dashboard/dashboard.html">Desempenho Geral</a>
-                    <a href="">Registrar Partida</a>
+                    <a href="registrarPartida.html" class="ativo">Registrar Partida</a>
                     <a href="../index.html" class="btnSair">Sair</a>
                 </ul>
             </nav>
@@ -194,9 +194,9 @@
             })
         }).then(function (res) {
             if (res.ok) {
-                document.getElementById('divConfirmarDados').innerHTML = "Partida Registrada e desempenho atualizado!";
+                document.getElementById('divConfirmarDados').innerHTML = `<span class="registrada"><b>Partida Registrada e desempenho atualizado!</b></span>`;
             } else {
-                document.getElementById('divConfirmarDados').innerHTML = "Erro ao registrar partida!";
+                document.getElementById('divConfirmarDados').innerHTML = `<span class="registrada">Erro ao registrar partida!</span>`;
             }
         })
 
